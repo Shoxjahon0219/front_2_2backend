@@ -9,6 +9,12 @@ async function start() {
   });
 
   const PORT = Number(process.env.PORT) || 3000;
+  app.setGlobalPrefix("api")
+
+  app.enableCors({
+    origin: true, // разрешить все origin (для dev)
+    credentials: true,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
