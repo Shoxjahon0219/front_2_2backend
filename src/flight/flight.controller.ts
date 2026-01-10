@@ -1,9 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { FlightsService } from './flight.service';
-import { CreateFlightDto } from './dto/create-flight.dto';
-import { UpdateFlightDto } from './dto/update-flight.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
+import { FlightsService } from "./flight.service";
+import { CreateFlightDto } from "./dto/create-flight.dto";
+import { UpdateFlightDto } from "./dto/update-flight.dto";
+import { AddUsersToFlightDto } from "./dto/add-users-to-flight.dto";
 
-@Controller('flight')
+@Controller("flight")
 export class FlightController {
   constructor(private readonly flightService: FlightsService) {}
 
@@ -12,23 +21,32 @@ export class FlightController {
     return this.flightService.create(createFlightDto);
   }
 
+  
   @Get()
   findAll() {
     return this.flightService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.flightService.findOne(+id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFlightDto: UpdateFlightDto) {
+  
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateFlightDto: UpdateFlightDto) {
     return this.flightService.update(+id, updateFlightDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.flightService.remove(+id);
+  }
+  
+  @Post(":id/users")
+  async addUsersToFlight(
+    @Param("id") flightId: number,
+    @Body() dto: AddUsersToFlightDto
+  ) {
+    return this.flightService.addUsersToFlight(flightId, dto.userIds);
   }
 }
